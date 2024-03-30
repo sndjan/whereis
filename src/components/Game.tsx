@@ -96,7 +96,7 @@ function Game() {
           />
           {bobLoaded && (
             <img
-              src="./public/bob.png"
+              src="./images/bob.png"
               alt=""
               style={{
                 position: "absolute",
