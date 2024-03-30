@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import GameCSS from "../modules/Game.module.css";
 
 function Game() {
