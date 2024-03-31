@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import GameCSS from "../modules/Game.module.css";
-import { Button } from "react-bootstrap";
 
 function Game() {
   const [imageUrl, setImageUrl] = useState(
