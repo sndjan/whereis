@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
 import GameCSS from "../modules/Game.module.css";
+import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
 
 function Game() {
   const [imageUrl, setImageUrl] = useState(
     "https://source.unsplash.com/500x500"
   );
-  const [imagePosition, setImagePosition] = useState({ x: -335, y: 300 });
+  const [imagePosition, setImagePosition] = useState({ x: -335, y: 360 });
   const [bobLoaded, setBobLoaded] = useState(false);
   const [restart, setRestart] = useState(false);
   const [count, setCount] = useState(0);
   const [timerRunning, setTimerRunning] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(0);
+  const [bobOpacity, setBobOpacity] = useState("0.6");
 
   const updateImage = () => {
     const randomNumber = Math.floor(Math.random() * 500) + 1;
@@ -24,7 +26,7 @@ function Game() {
 
   const handleBobLoad = () => {
     setBobLoaded(true);
-    if (count >= 1 && count <= 4) {
+    if (count >= 0 && imagePosition.x !== -335 && count <= 4) {
       startTimer();
     }
   };
@@ -33,7 +35,9 @@ function Game() {
     if (count <= 3) {
       updateImage();
     }
-    setCount(count + 1);
+    if (imagePosition.x !== -335) {
+      setCount(count + 1);
+    }
     stopTimer();
     if (count >= 4) {
       setRestart(true);
@@ -53,9 +57,13 @@ function Game() {
     setCount(0);
     setTimeElapsed(0);
     setBobLoaded(true);
-    setImagePosition({ x: -335, y: 300 });
+    setImagePosition({ x: -335, y: 360 });
     setRestart(false);
     setTimerRunning(false);
+  };
+
+  const changeBob = (opacity: string) => {
+    setBobOpacity(opacity);
   };
 
   useEffect(() => {
@@ -91,43 +99,47 @@ function Game() {
     <>
       <div className={GameCSS.outerbox}>
         <div className={GameCSS.text}>
-          <div>
-            <input
-              type="radio"
-              className="btn-check"
-              name="options"
-              id="option1"
-              autoComplete="off"
-            />
-            <label className="btn btn-outline-light" htmlFor="option1">
-              Easy
-            </label>
-
-            <input
-              type="radio"
-              className="btn-check"
-              name="options"
-              id="option2"
-              autoComplete="off"
-              checked
-            />
-            <label className="btn btn-outline-light" htmlFor="option2">
-              Medium
-            </label>
-
-            <input
-              type="radio"
-              className="btn-check"
-              name="options"
-              id="option3"
-              autoComplete="off"
-            />
-            <label className="btn btn-outline-light" htmlFor="option3">
-              Hard
-            </label>
+          <h1 style={{ marginBottom: "50px" }}>WHERE IS BOB?</h1>
+          <div style={{ marginBottom: "60px" }}>
+            <ToggleButtonGroup type="radio" name="options" defaultValue={2}>
+              <ToggleButton
+                id="tbg-radio-1"
+                value={1}
+                variant="outline-light"
+                onChange={() => changeBob(".8")}
+              >
+                Easy
+              </ToggleButton>
+              <ToggleButton
+                id="tbg-radio-2"
+                value={2}
+                variant="outline-light"
+                onChange={() => changeBob(".6")}
+              >
+                Medium
+              </ToggleButton>
+              <ToggleButton
+                id="tbg-radio-3"
+                value={3}
+                variant="outline-light"
+                onChange={() => changeBob(".4")}
+              >
+                Hard
+              </ToggleButton>
+              <ToggleButton
+                id="tbg-radio-4"
+                value={4}
+                variant="outline-light"
+                onChange={() => changeBob(".1")}
+              >
+                Impossible
+              </ToggleButton>
+            </ToggleButtonGroup>
           </div>
           <div>Click Bob to start the game!</div>
-          <div>{formatTime(timeElapsed)}</div>
+          <div>
+            You found {count}/5 in {formatTime(timeElapsed)}
+          </div>
         </div>
         <div
           className={GameCSS.game}
@@ -173,6 +185,7 @@ function Game() {
           />
           {bobLoaded && (
             <img
+              id="bob"
               src="./images/bob.png"
               alt=""
               style={{
@@ -180,7 +193,7 @@ function Game() {
                 left: imagePosition.x,
                 top: imagePosition.y,
                 width: "15px",
-                opacity: ".5",
+                opacity: bobOpacity,
               }}
               onClick={handleBobClick} // Hier den Klick-Handler hinzufügen
             />
