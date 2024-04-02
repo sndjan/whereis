@@ -16,13 +16,13 @@ function Game() {
   const [bobOpacity, setBobOpacity] = useState("0.6");
 
   const updateImage = () => {
-    const randomNumber = Math.floor(Math.random() * 500) + 1;
+    const randomNumber = Math.floor(Math.random() * 500) + 2;
     setImageUrl(`https://source.unsplash.com/500x500?${randomNumber}`);
     setImagePosition({
       x: Math.floor(Math.random() * 400),
       y: Math.floor(Math.random() * 400),
     });
-    setBobLoaded(false); // Zurücksetzen, um das "bob.png"-Bild neu zu laden
+    setBobLoaded(false);
   };
 
   const handleBobLoad = () => {
@@ -221,19 +221,31 @@ function Game() {
             onLoad={handleBobLoad}
           />
           {bobLoaded && (
-            <img
-              id="bob"
-              src="./images/bob.png"
-              alt=""
-              style={{
-                position: "absolute",
-                left: imagePosition.x,
-                top: imagePosition.y,
-                width: "15px",
-                opacity: bobOpacity,
-              }}
-              onClick={handleBobClick} // Hier den Klick-Handler hinzufügen
-            />
+            <>
+              <div
+                style={{
+                  position: "absolute",
+                  left: imagePosition.x - 7,
+                  top: imagePosition.y - 5,
+                  width: "30px",
+                  height: "40px",
+                  zIndex: "3",
+                }}
+                onClick={handleBobClick}
+              ></div>
+              <img
+                id="bob"
+                src="./images/bob.png"
+                alt=""
+                style={{
+                  position: "absolute",
+                  left: imagePosition.x,
+                  top: imagePosition.y,
+                  width: "15px",
+                  opacity: bobOpacity,
+                }}
+              />
+            </>
           )}
         </div>
       </div>
