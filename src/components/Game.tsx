@@ -6,9 +6,10 @@ function Game() {
   const [imageUrl, setImageUrl] = useState(
     "https://source.unsplash.com/500x500"
   );
-  const [imagePosition, setImagePosition] = useState({ x: -335, y: 360 });
+  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
   const [bobLoaded, setBobLoaded] = useState(false);
   const [restart, setRestart] = useState(false);
+  const [start, setStart] = useState(true);
   const [count, setCount] = useState(0);
   const [timerRunning, setTimerRunning] = useState(false);
   const [timeElapsed, setTimeElapsed] = useState(0);
@@ -25,8 +26,8 @@ function Game() {
   };
 
   const handleBobLoad = () => {
-    setBobLoaded(true);
-    if (count >= 0 && imagePosition.x !== -335 && count <= 4) {
+    if (start === false) {
+      setBobLoaded(true);
       startTimer();
     }
   };
@@ -35,9 +36,7 @@ function Game() {
     if (count <= 3) {
       updateImage();
     }
-    if (imagePosition.x !== -335) {
-      setCount(count + 1);
-    }
+    setCount(count + 1);
     stopTimer();
     if (count >= 4) {
       setRestart(true);
@@ -53,11 +52,16 @@ function Game() {
     setTimerRunning(false);
   };
 
+  const startGame = () => {
+    setStart(false);
+    setBobLoaded(true);
+    updateImage();
+  };
+
   const resetGame = () => {
     setCount(0);
     setTimeElapsed(0);
-    setBobLoaded(true);
-    setImagePosition({ x: -335, y: 360 });
+    updateImage();
     setRestart(false);
     setTimerRunning(false);
   };
@@ -99,7 +103,10 @@ function Game() {
     <>
       <div className={GameCSS.outerbox}>
         <div className={GameCSS.text}>
-          <h1 style={{ marginBottom: "50px" }}>WHERE IS BOB?</h1>
+          <h1 style={{ marginBottom: "50px" }}>
+            WHERE IS BOB?{" "}
+            <img src="./images/bob.png" alt="" style={{ width: "30px" }} />
+          </h1>
           <div style={{ marginBottom: "60px" }}>
             <ToggleButtonGroup type="radio" name="options" defaultValue={2}>
               <ToggleButton
@@ -136,7 +143,6 @@ function Game() {
               </ToggleButton>
             </ToggleButtonGroup>
           </div>
-          <div>Click Bob to start the game!</div>
           <div>
             You found {count}/5 in {formatTime(timeElapsed)}
           </div>
@@ -145,7 +151,7 @@ function Game() {
           className={GameCSS.game}
           style={{ position: "relative", width: "500px", height: "500px" }}
         >
-          {restart && (
+          {start && (
             <div
               style={{
                 width: "100%",
@@ -156,8 +162,38 @@ function Game() {
                 position: "relative",
                 backgroundColor: "#0000009c",
                 justifyContent: "center",
+                borderRadius: "10px",
               }}
             >
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={startGame}
+                style={{
+                  position: "relative",
+                  zIndex: "2",
+                }}
+              >
+                Start
+              </button>
+            </div>
+          )}
+          {restart && (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                zIndex: "1",
+                position: "relative",
+                backgroundColor: "#0000009c",
+                justifyContent: "center",
+                borderRadius: "10px",
+              }}
+            >
+              <p style={{ fontSize: "20px" }}>Congrats! You found 5/5 Bobs!</p>
               <button
                 type="button"
                 className="btn btn-primary"
@@ -180,6 +216,7 @@ function Game() {
               top: 0,
               width: "100%",
               height: "100%",
+              borderRadius: "10px",
             }}
             onLoad={handleBobLoad}
           />

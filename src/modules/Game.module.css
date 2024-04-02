@@ -1,26 +1,35 @@
 .outerbox {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: center; /* Horizontales Zentrieren */
-    height: 100vh; /* Die Höhe der gesamten Bildschirmhöhe einnehmen */
+    justify-content: center;
+    height: 90vh;
     font-family: "SFMono";
+    margin-top: 40px;
+    column-gap: 100px;
 }
 
 .text {
-    margin-right: 100px;
     display: flex;
     flex-direction: column;
     font-size: 25px;
-    align-items: center; /* Vertikales Zentrieren des Textes */
-    margin-bottom: 100px;
+    align-items: center;
+    margin-bottom: 50px;
 }
 
 .game {
     border: 10px white solid;
-    border-radius: 15px;
+    border-radius: 10px;
+    background-color: white;
 }
 
 @font-face {
     font-family: "SFMono";
     src: url('../fonts/sf-mono/SFMonoMedium.otf');
   }
+
+  @media only screen and (max-width: 768px) {
+    .outerbox {
+        margin-bottom: 200px;
+    }
+}
